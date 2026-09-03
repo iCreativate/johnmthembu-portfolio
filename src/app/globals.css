@@ -1,26 +1,275 @@
 @import "tailwindcss";
 
 :root {
-  --background: #ffffff;
-  --foreground: #171717;
+  --ivory: #f5f2ec;
+  --ivory-dark: #ebe6dd;
+  --ink: #111110;
+  --charcoal: #2c2a27;
+  --stone: #8b8680;
+  --stone-light: #b5b0a8;
+  --accent: #b85c38;
+  --accent-muted: #c17b4e;
+  --dark-section: #1a1917;
+  --dark-elevated: #242220;
+
+  --background: var(--ivory);
+  --foreground: var(--ink);
+  --muted: var(--stone);
+
+  --font-display: var(--font-syne);
+  --font-body: var(--font-dm-sans);
+  --font-editorial: var(--font-instrument-serif);
+
+  --grid-columns: 12;
+  --page-margin: clamp(1.25rem, 4vw, 4rem);
+  --section-gap: clamp(5rem, 12vw, 10rem);
+  --content-max: 1400px;
+
+  --ease-out-expo: cubic-bezier(0.16, 1, 0.3, 1);
+  --ease-in-out: cubic-bezier(0.65, 0, 0.35, 1);
 }
 
 @theme inline {
+  --color-ivory: var(--ivory);
+  --color-ivory-dark: var(--ivory-dark);
+  --color-ink: var(--ink);
+  --color-charcoal: var(--charcoal);
+  --color-stone: var(--stone);
+  --color-stone-light: var(--stone-light);
+  --color-accent: var(--accent);
+  --color-accent-muted: var(--accent-muted);
+  --color-dark-section: var(--dark-section);
+  --color-dark-elevated: var(--dark-elevated);
   --color-background: var(--background);
   --color-foreground: var(--foreground);
-  --font-sans: var(--font-geist-sans);
-  --font-mono: var(--font-geist-mono);
+  --color-muted: var(--muted);
+
+  --font-sans: var(--font-body);
+  --font-display: var(--font-display);
+  --font-editorial: var(--font-editorial);
+
+  --text-display-xl: clamp(2.5rem, 5vw + 1rem, 4.5rem);
+  --text-display-lg: clamp(2rem, 3.5vw + 0.5rem, 3.25rem);
+  --text-display-md: clamp(1.5rem, 2vw + 0.5rem, 2.25rem);
+  --text-display-sm: clamp(1.125rem, 1.5vw + 0.25rem, 1.5rem);
+  --text-body-lg: clamp(1.0625rem, 0.5vw + 0.9rem, 1.25rem);
+  --text-body: clamp(0.9375rem, 0.25vw + 0.875rem, 1.0625rem);
+  --text-caption: clamp(0.75rem, 0.15vw + 0.7rem, 0.8125rem);
+  --text-label: clamp(0.6875rem, 0.1vw + 0.65rem, 0.75rem);
 }
 
-@media (prefers-color-scheme: dark) {
-  :root {
-    --background: #0a0a0a;
-    --foreground: #ededed;
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+}
+
+html {
+  scroll-behavior: smooth;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  html {
+    scroll-behavior: auto;
+  }
+
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
   }
 }
 
 body {
   background: var(--background);
   color: var(--foreground);
-  font-family: Arial, Helvetica, sans-serif;
+  font-family: var(--font-body), system-ui, sans-serif;
+  font-size: var(--text-body);
+  line-height: 1.6;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  overflow-x: hidden;
+}
+
+::selection {
+  background: var(--accent);
+  color: var(--ivory);
+}
+
+:focus-visible {
+  outline: 2px solid var(--accent);
+  outline-offset: 3px;
+}
+
+/* Grain overlay */
+.grain::after {
+  content: "";
+  position: fixed;
+  inset: 0;
+  pointer-events: none;
+  z-index: 9998;
+  opacity: 0.035;
+  background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+  background-repeat: repeat;
+  background-size: 180px;
+}
+
+/* Typography utilities */
+.font-display {
+  font-family: var(--font-display), system-ui, sans-serif;
+  letter-spacing: -0.02em;
+}
+
+.font-editorial {
+  font-family: var(--font-editorial), Georgia, serif;
+  font-style: italic;
+}
+
+.text-display-xl {
+  font-size: var(--text-display-xl);
+  line-height: 1.05;
+}
+
+.text-display-lg {
+  font-size: var(--text-display-lg);
+  line-height: 1.1;
+}
+
+.text-display-md {
+  font-size: var(--text-display-md);
+  line-height: 1.15;
+}
+
+.text-display-sm {
+  font-size: var(--text-display-sm);
+  line-height: 1.25;
+}
+
+.text-body-lg {
+  font-size: var(--text-body-lg);
+  line-height: 1.55;
+}
+
+.text-caption {
+  font-size: var(--text-caption);
+  line-height: 1.4;
+  letter-spacing: 0.04em;
+}
+
+.text-label {
+  font-size: var(--text-label);
+  line-height: 1.3;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+}
+
+/* Grid system */
+.page-grid {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 1rem;
+  margin-inline: var(--page-margin);
+  max-width: var(--content-max);
+}
+
+@media (min-width: 768px) {
+  .page-grid {
+    grid-template-columns: repeat(8, 1fr);
+    gap: 1.25rem;
+  }
+}
+
+@media (min-width: 1024px) {
+  .page-grid {
+    grid-template-columns: repeat(12, 1fr);
+    gap: 1.5rem;
+  }
+}
+
+.page-grid > .full {
+  grid-column: 1 / -1;
+}
+
+/* Section spacing */
+.section-padding {
+  padding-block: var(--section-gap);
+}
+
+/* Link underline animation */
+.link-hover {
+  position: relative;
+  text-decoration: none;
+}
+
+.link-hover::after {
+  content: "";
+  position: absolute;
+  left: 0;
+  bottom: -2px;
+  width: 100%;
+  height: 1px;
+  background: currentColor;
+  transform: scaleX(0);
+  transform-origin: right;
+  transition: transform 0.4s var(--ease-out-expo);
+}
+
+.link-hover:hover::after,
+.link-hover:focus-visible::after {
+  transform: scaleX(1);
+  transform-origin: left;
+}
+
+/* Image reveal mask */
+.image-mask {
+  clip-path: inset(0 0 0 0);
+}
+
+/* Horizontal scroll section */
+.horizontal-scroll {
+  display: flex;
+  gap: 1.5rem;
+  overflow-x: auto;
+  scroll-snap-type: x mandatory;
+  scrollbar-width: none;
+  -ms-overflow-style: none;
+  padding-inline: var(--page-margin);
+}
+
+.horizontal-scroll::-webkit-scrollbar {
+  display: none;
+}
+
+.horizontal-scroll > * {
+  scroll-snap-align: start;
+  flex-shrink: 0;
+}
+
+/* Dark section */
+.section-dark {
+  background: var(--dark-section);
+  color: var(--ivory);
+}
+
+.section-dark .text-muted {
+  color: var(--stone-light);
+}
+
+/* Skip link */
+.skip-link {
+  position: absolute;
+  top: -100%;
+  left: 1rem;
+  z-index: 10000;
+  padding: 0.75rem 1.25rem;
+  background: var(--ink);
+  color: var(--ivory);
+  font-size: var(--text-caption);
+  text-decoration: none;
+}
+
+.skip-link:focus {
+  top: 1rem;
 }
